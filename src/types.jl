@@ -1,4 +1,4 @@
-export Creek, Deployment, CrossSection, bins, parse_deps, parse_cs
+export Creek, ADCP, Deployment, CrossSection, bins, parse_deps, parse_cs
 
 type Creek{C}
     
