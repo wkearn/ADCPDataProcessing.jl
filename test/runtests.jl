@@ -1,5 +1,9 @@
-using ADCPDataProcessing
+using DischargeData, ADCPDataProcessing
 using Base.Test
 
-# write your own tests here
-@test 1 == 2
+setADCPdatadir!(Pkg.dir("TidalFluxExampleData","data","adcp"))
+setmetdatadir!(Pkg.dir("TidalFluxExampleData","data","met"))
+
+creek = Creek{:sweeney}()
+deps = parse_deps(creek)
+adata = load_data.(deps)
