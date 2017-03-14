@@ -14,6 +14,7 @@ script:
   - julia -e '
 Pkg.clone("https://github.com/wkearn/DischargeData.jl");
 Pkg.clone("https://github.com/wkearn/PIEMetData.jl");
+Pkg.clone("https://github.com/wkearn/TidalFluxExampleData.jl");
 Pkg.clone(pwd()); Pkg.build("ADCPDataProcessing"); Pkg.test("ADCPDataProcessing"; coverage=true)'
 after_success:
   # push coverage results to Coveralls
