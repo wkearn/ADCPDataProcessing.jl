@@ -52,7 +52,7 @@ function load_data(dep::Deployment,ADCPdatadir=data_directories[:_ADCPDATA_DIR])
     data_dir = joinpath(ADCPdatadir,
                         string(dep.location),
                         "deployments",
-                        hex(hash(dep),16))
+                        dep.id)
     p = vec(readdlm(joinpath(data_dir,"pressure.csv")))
     v = vec(readdlm(joinpath(data_dir,"velocities.csv")))
     v = reshape_velocities(v,dep)
