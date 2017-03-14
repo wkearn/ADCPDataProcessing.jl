@@ -61,7 +61,7 @@ function Base.show(io::IO,cs::CrossSection)
     print(io,cs.location)
 end
 
-function parse_deps{C}(creek::Creek{C},ADCPdatadir=data_directories[:_ADCPDATA_DIR])
+function parse_deps{C}(creek::Creek{C},ADCPdatadir=adcp_data_directory[:_ADCPDATA_DIR])
     d = JSON.parsefile(joinpath(ADCPdatadir,string(C),"METADATA.json"))
     deps = Deployment[]
     for dep in d["deployments"]
@@ -80,7 +80,7 @@ function parse_deps{C}(creek::Creek{C},ADCPdatadir=data_directories[:_ADCPDATA_D
     deps
 end
 
-function parse_cs{C}(creek::Creek{C},ADCPdatadir=data_directories[:_ADCPDATA_DIR])
+function parse_cs{C}(creek::Creek{C},ADCPdatadir=adcp_data_directory[:_ADCPDATA_DIR])
     cs = JSON.parsefile(joinpath(ADCPdatadir,string(C),"METADATA.json"))["cross-section"]
     f = cs["file"]
     Amax = cs["Amax"]

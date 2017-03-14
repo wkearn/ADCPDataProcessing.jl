@@ -48,7 +48,7 @@ function Base.show(io::IO,csdata::CrossSectionData)
     print(io,"Cross section data loaded")
 end
 
-function load_data(dep::Deployment,ADCPdatadir=data_directories[:_ADCPDATA_DIR])
+function load_data(dep::Deployment,ADCPdatadir=adcp_data_directory[:_ADCPDATA_DIR])
     data_dir = joinpath(ADCPdatadir,
                         string(dep.location),
                         "deployments",
@@ -78,7 +78,7 @@ function reshape_velocities(v::Vector{Float64},dep::Deployment)
     reshape(v,(n,m,3)...)
 end
 
-function load_data(cs::CrossSection,ADCPdatadir=data_directories[:_ADCPDATA_DIR])
+function load_data(cs::CrossSection,ADCPdatadir=adcp_data_directory[:_ADCPDATA_DIR])
     data_path = joinpath(ADCPdatadir,
                         string(cs.location),
                         cs.file)
