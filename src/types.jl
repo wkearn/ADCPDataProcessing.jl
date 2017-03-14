@@ -31,6 +31,7 @@ end
 
 
 type Deployment
+    id::String
     location::Creek
     startDate::DateTime
     endDate::DateTime
@@ -64,6 +65,7 @@ function parse_deps{C}(creek::Creek{C},ADCPdatadir=data_directories[:_ADCPDATA_D
     d = JSON.parsefile(joinpath(ADCPdatadir,string(C),"METADATA.json"))
     deps = Deployment[]
     for dep in d["deployments"]
+        id = dep["id"]
         sd = DateTime(dep["startDate"])
         ed = DateTime(dep["endDate"])
         sN = dep["serialNumber"]
@@ -73,7 +75,7 @@ function parse_deps{C}(creek::Creek{C},ADCPdatadir=data_directories[:_ADCPDATA_D
         nC = dep["nCells"]
         dT = dep["deltaT"]
         aZ = dep["elevation"]
-        push!(deps,Deployment(creek,sd,ed,ADCP(sN,hA,bD,cS,nC,dT,aZ)))
+        push!(deps,Deployment(id,creek,sd,ed,ADCP(sN,hA,bD,cS,nC,dT,aZ)))
     end
     deps
 end
@@ -99,6 +101,7 @@ function Base.hash(x::ADCP,h::UInt)
 end
 
 function Base.hash(x::Deployment,h::UInt)
+    h = hash(x.id,h)
     h = hash(x.location,h)
     h = hash(x.startDate,h)
     h = hash(x.endDate,h)
