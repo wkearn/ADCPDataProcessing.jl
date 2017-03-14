@@ -1,4 +1,4 @@
-using ADCPDataProcessing, TidalFluxExampleData
+using PIEMetData, ADCPDataProcessing, TidalFluxExampleData
 using Base.Test
 
 setADCPdatadir!(Pkg.dir("TidalFluxExampleData","data","adcp"))
