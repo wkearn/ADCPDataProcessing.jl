@@ -1,4 +1,4 @@
-using TidalDischargeModels.MetData, DataFrames, Interpolations, Base.Dates
+using PIEMetData, DataFrames, Interpolations, Base.Dates
 
 export atmoscorrect, InterpolatedCrossSectionData, ADCPDataCP,
 area
