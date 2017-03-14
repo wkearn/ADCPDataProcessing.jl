@@ -11,11 +11,7 @@ notifications:
 # uncomment the following lines to override the default test script
 script:
   - if [[ -a .git/shallow ]]; then git fetch --unshallow; fi
-  - julia -e '
-Pkg.clone("https://github.com/wkearn/DischargeData.jl");
-Pkg.clone("https://github.com/wkearn/PIEMetData.jl");
-Pkg.clone("https://github.com/wkearn/TidalFluxExampleData.jl");
-Pkg.clone(pwd()); Pkg.build("ADCPDataProcessing"); Pkg.test("ADCPDataProcessing"; coverage=true)'
+  - julia -e 'Pkg.clone("https://github.com/wkearn/DischargeData.jl"); Pkg.clone("https://github.com/wkearn/PIEMetData.jl"); Pkg.clone("https://github.com/wkearn/TidalFluxExampleData.jl"); Pkg.clone(pwd()); Pkg.build("ADCPDataProcessing"); Pkg.test("ADCPDataProcessing"; coverage=true)'
 after_success:
   # push coverage results to Coveralls
   - julia -e 'cd(Pkg.dir("ADCPDataProcessing")); Pkg.add("Coverage"); using Coverage; Coveralls.submit(Coveralls.process_folder())'
