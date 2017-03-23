@@ -6,5 +6,6 @@ include("databases.jl")
 include("types.jl")
 include("data.jl")
 include("discharge.jl")
+include("calibrations.jl")
 
 end # module
