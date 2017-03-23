@@ -5,6 +5,7 @@ export CalibrationDeployment, parse_cals
 # calibration definitions from METADATA.json
 
 type CalibrationDeployment
+    id::String
     deployment::Deployment
     cs::CrossSection
     startDate::DateTime
@@ -22,15 +23,16 @@ end
 function parse_cals{C}(creek::Creek{C},ADCPdatadir=adcp_data_directory[:_ADCPDATA_DIR])
     cs = parse_cs(creek)
     deps = parse_deps(creek)
-    hs = hash.(deps)
+    ids = map(x->x.id,deps)
     d = JSON.parsefile(joinpath(ADCPdatadir,string(C),"METADATA.json"))
-    cals = Calibration[]
+    cals = CalibrationDeployment[]
     for cal in d["calibrations"]
+        id = cal["id"]
         dep = cal["deployment"]
         sD = DateTime(cal["startDate"])
         eD = DateTime(cal["endDate"])
-        dep_match = findfirst(hex.(hs,16),dep)
-        push!(cals,CalibrationDeployment(deps[dep_match],cs,sD,eD))
+        dep_match = findfirst(ids,dep)
+        push!(cals,CalibrationDeployment(id,deps[dep_match],cs,sD,eD))
     end
     cals
 end
@@ -55,7 +57,7 @@ function load_data(cal::CalibrationDeployment,ADCPdatadir=adcp_data_directory[:_
     data_dir = joinpath(ADCPdatadir,
                         string(cal.deployment.location),
                         "calibrations",
-                        hex(hash(cal),16))
+                        cal.id)
     D = readtable(joinpath(data_dir,"discharge_calibrations.csv"))
-    Calibration(cal,DateTime(D[:DateTime]),D[:SP_Q],dd)
+    Calibration(DateTime(D[:DateTime]),D[:SP_Q],dd)
 end
