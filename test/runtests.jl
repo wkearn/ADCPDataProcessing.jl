@@ -12,3 +12,6 @@ cs = parse_cs(creek)
 csd = load_data(cs)
 
 Discharge(adata[1],csd)
+
+cals = parse_cals(creek)
+cc = load_data(cals[1])
