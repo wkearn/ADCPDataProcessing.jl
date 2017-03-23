@@ -19,11 +19,11 @@ function Base.show(io::IO,cal::CalibrationDeployment)
     print(io,cal.deployment)    
 end
 
-function parse_cals{C}(creek::Creek{C})
+function parse_cals{C}(creek::Creek{C},ADCPdatadir=adcp_data_directory[:_ADCPDATA_DIR])
     cs = parse_cs(creek)
     deps = parse_deps(creek)
     hs = hash.(deps)
-    d = JSON.parsefile(joinpath(_DATABASE_DIR,string(C),"METADATA.json"))
+    d = JSON.parsefile(joinpath(ADCPdatadir,string(C),"METADATA.json"))
     cals = Calibration[]
     for cal in d["calibrations"]
         dep = cal["deployment"]
@@ -46,13 +46,13 @@ Base.:(==)(c1::CalibrationDeployment,c2::CalibrationDeployment) = hash(c1)==hash
 #####################################################
 # Loading calibration data
 
-function load_data(cal::CalibrationDeployment)
+function load_data(cal::CalibrationDeployment,ADCPdatadir=adcp_data_directory[:_ADCPDATA_DIR])
     # Load ADCP data and convert to discharges
     ad = load_data(cal.deployment)
     cs = load_data(cal.cs)
     dd = Discharge(ad,cs)
     
-    data_dir = joinpath(_DATABASE_DIR,
+    data_dir = joinpath(ADCPdatadir,
                         string(cal.deployment.location),
                         "calibrations",
                         hex(hash(cal),16))
