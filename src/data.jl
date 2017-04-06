@@ -30,6 +30,7 @@ end
 deployment(data::ADCPData) = data.dep
 pressures(data::ADCPData) = data.p
 velocities(data::ADCPData) = data.v
+# Times is also exported by DischargeData...
 times(data::ADCPData) = data.t
 temperatures(data::ADCPData) = data.temp
 pitches(data::ADCPData) = data.pitch
