@@ -59,11 +59,9 @@ function findzeros(cszi,h)
     return a,b
 end
 
-function vavg(pq::Stage,adcp::ADCPData)
-    bs = bins(adcp.dep.adcp)
+function vavg(pq::Stage,V::Array{Float64,3},bs::AbstractVector)
     p = quantity(pq)
     t = DischargeData.times(pq)
-    v = adcp.v
     tops = zeros(Int,length(p))
     for i in 1:length(p)
         q = find(x->x<p[i],bs)
@@ -76,7 +74,7 @@ function vavg(pq::Stage,adcp::ADCPData)
             if r == 0
                 vma[i,j] = 0.0
             else
-                vma[i,j] = mean(v[1:r,i,j])
+                vma[i,j] = mean(V[1:r,i,j])
             end
         end
     end
@@ -88,7 +86,7 @@ function computedischarge(adcp::ADCPData,cs::CrossSectionData)
     cd1 = atmoscorrect(adcp)
     cp = quantity(cd1)
     ts = DischargeData.times(cd1)
-    vma = vavg(cd1,adcp)
+    vma = vavg(cd1,adcp.v,bins(adcp.dep.adcp))
     l,Z = eig(cov(vma))
     vs = vma*Z[:,3]
     h = E+0.01:0.01:maximum(cp)+E
