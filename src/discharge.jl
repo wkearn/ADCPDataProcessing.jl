@@ -87,7 +87,7 @@ function computedischarge(adcp::ADCPData,cs::CrossSectionData)
     E = adcp.dep.adcp.elevation
     cd1 = atmoscorrect(adcp)
     cp = quantity(cd1)
-    ts = times(cd1)
+    ts = DischargeData.times(cd1)
     vma = vavg(cd1)
     l,Z = eig(cov(vma))
     vs = vma*Z[:,3]
