@@ -11,7 +11,7 @@ adata = load_data.(deps)
 cs = parse_cs(creek)
 csd = load_data(cs)
 
-#p,Q = computedischarge(adata[1],csd)
+p,Q = computedischarge(adata[1],csd)
 
 cals = parse_cals(creek)
 cc = load_data(cals[1])
