@@ -81,6 +81,23 @@ function vavg(pq::Stage,V::Array{Float64,3},bs::AbstractVector)
     vma
 end
 
+function polyFit(h,A,k)
+    X = zeros(length(h),k+1)
+    for i in 0:k
+        X[:,i+1] = h.^i
+    end
+    X\A
+end
+
+function applyPolyFit(a,h::Vector{Float64})
+    k = length(a)-1
+    b = a[k+1]*ones(h)
+    for i in k:-1:1
+        b = a[i] + b.*h
+    end
+    b
+end
+
 function computedischarge(adcp::ADCPData,cs::CrossSectionData)
     E = adcp.dep.adcp.elevation
     cd1 = atmoscorrect(adcp)
@@ -92,9 +109,8 @@ function computedischarge(adcp::ADCPData,cs::CrossSectionData)
     h = E+0.01:0.01:maximum(cp)+E
     csdi = InterpolatedCrossSectionData(cs)
     Ah = map(x->area(csdi,x),h)
-    X = [ones(h) h h.^2 h.^3 h.^4 h.^5]
-    b = X\Ah
-    A = b[1] + b[2]*(cp+E)+b[3]*(cp+E).^2+b[4]*(cp+E).^3+b[5]*(cp+E).^4+b[6]*(cp+E).^5
+    b = polyFit(h,Ah,5)
+    A = applyPolyFit(b,cp+E)
     Q = vs.*A
     Qi = Q.*detectOrientation(cp,Q)
     cd1, Discharge(ts,Qi)
