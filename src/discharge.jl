@@ -15,7 +15,7 @@ function atmoscorrect(adcp::ADCPData)
     Pi = interpolate((M[:DateTime],),float(pc),Gridded(Linear()))
     ph = p-Pi[t] # hydrodynamic pressure
     cp = ph*100000./(10*9.81*1025) # Convert pressure in dbar to m
-    ADCPDataCP(deployment(adcp),cp,velocities(adcp),times(adcp),temperatures(adcp),pitches(adcp),rolls(adcp),headings(adcp),analog(adcp)...)
+    Stage(t,cp)
 end
 
 type InterpolatedCrossSectionData
@@ -86,8 +86,8 @@ end
 function computedischarge(adcp::ADCPData,cs::CrossSectionData)
     E = adcp.dep.adcp.elevation
     cd1 = atmoscorrect(adcp)
-    cp = cd1.p
-    ts = cd1.t
+    cp = quantity(cd1)
+    ts = times(cd1)
     vma = vavg(cd1)
     l,Z = eig(cov(vma))
     vs = vma*Z[:,3]
