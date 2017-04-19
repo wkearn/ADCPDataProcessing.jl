@@ -103,14 +103,20 @@ function applyPolyFit(a,h::Vector{Float64})
     b
 end
 
+function rotate(V::Velocity)
+    vma = detupleize(quantity(V))
+    ts = DischargeData.times(V)
+    l,Z = eig(cov(vma))
+    AlongChannelVelocity(ts,vma*Z[:,3])
+end
+
 function computedischarge(adcp::ADCPData,cs::CrossSectionData)
     E = adcp.dep.adcp.elevation
     cd1 = atmoscorrect(adcp)
     cp = quantity(cd1)
     ts = DischargeData.times(cd1)
-    vma = vavg(cd1,adcp.v,bins(adcp.dep.adcp))
-    l,Z = eig(cov(vma))
-    vs = vma*Z[:,3]
+    V = vavg(cd1,adcp.v,bins(adcp.dep.adcp)) # :: Velocity
+    vs = rotate(V) # :: AlongChannelVelocity
     h = E+0.01:0.01:maximum(cp)+E
     csdi = InterpolatedCrossSectionData(cs)
     Ah = map(x->area(csdi,x),h)
