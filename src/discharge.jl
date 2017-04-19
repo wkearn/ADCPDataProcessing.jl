@@ -110,6 +110,15 @@ function rotate(V::Velocity)
     AlongChannelVelocity(ts,vma*Z[:,3])
 end
 
+function computearea(E,h::Stage,cs::CrossSectionData)
+    ts,hs = unzip(h)
+    csdi = InterpolatedCrossSectionData(cs)
+    htest = E+0.01:0.01:maximum(hs)+E
+    Ah = map(x->area(csdi,x),htest)
+    b = polyFit(htest,Ah,5)
+    CrossSectionalArea(ts,applyPolyFit(b,hs+E))
+end
+
 function computedischarge(adcp::ADCPData,cs::CrossSectionData)
     E = adcp.dep.adcp.elevation
     cd1 = atmoscorrect(adcp)
@@ -117,13 +126,9 @@ function computedischarge(adcp::ADCPData,cs::CrossSectionData)
     ts = DischargeData.times(cd1)
     V = vavg(cd1,adcp.v,bins(adcp.dep.adcp)) # :: Velocity
     vs = rotate(V) # :: AlongChannelVelocity
-    h = E+0.01:0.01:maximum(cp)+E
-    csdi = InterpolatedCrossSectionData(cs)
-    Ah = map(x->area(csdi,x),h)
-    b = polyFit(h,Ah,5)
-    A = applyPolyFit(b,cp+E)
-    Q = vs.*A
-    Qi = Q.*detectOrientation(cp,Q)
+    A = computearea(E,cd1,cs) # :: CrossSectionalArea
+    Q = A*vs # :: Discharge
+    Qi = quantity(Q).*detectOrientation(cp,quantity(Q))
     cd1, Discharge(ts,Qi)
 end
 
