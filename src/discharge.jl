@@ -59,6 +59,11 @@ function findzeros(cszi,h)
     return a,b
 end
 
+# We need a way to turn a Nx3 array into an N vector of
+# tuples
+tupleize(X::AbstractArray{Float64,2}) = [(X[i,:]...) for i in 1:size(X,1)]
+detupleize(T::AbstractVector{Tuple{Float64,Float64,Float64}}) = vcat([[T[i]...]' for i in 1:length(T)]...)
+
 function vavg(pq::Stage,V::Array{Float64,3},bs::AbstractVector)
     p = quantity(pq)
     t = DischargeData.times(pq)
@@ -78,7 +83,7 @@ function vavg(pq::Stage,V::Array{Float64,3},bs::AbstractVector)
             end
         end
     end
-    vma
+    Velocity(t,tupleize(vma))    
 end
 
 function polyFit(h,A,k)
