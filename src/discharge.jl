@@ -64,12 +64,12 @@ end
 tupleize(X::AbstractArray{Float64,2}) = [(X[i,:]...) for i in 1:size(X,1)]
 detupleize(T::AbstractVector{Tuple{Float64,Float64,Float64}}) = vcat([[T[i]...]' for i in 1:length(T)]...)
 
-function vavg(pq::Stage,V::Array{Float64,3},bs::AbstractVector)
+function vavg(pq::Stage,V::Array{Float64,3},bs::AbstractVector,α=cosd(25))
     p = quantity(pq)
     t = DischargeData.times(pq)
     tops = zeros(Int,length(p))
     for i in 1:length(p)
-        q = find(x->x<p[i],bs)
+        q = find(x->x<p[i]*α,bs)
         tops[i] = isempty(q) ? 0 : q[end]
     end
     vma = zeros(length(p),3)
@@ -119,11 +119,11 @@ function computearea(E,h::Stage,cs::CrossSectionData)
     CrossSectionalArea(ts,applyPolyFit(b,hs+E))
 end
 
-function computedischarge(adcp::ADCPData,cs::CrossSectionData)
+function computedischarge(adcp::ADCPData,cs::CrossSectionData,α=cosd(25))
     E = adcp.dep.adcp.elevation
     cd1 = atmoscorrect(adcp)
     ts,cp = unzip(cd1)
-    V = vavg(cd1,adcp.v,bins(adcp.dep.adcp)) # :: Velocity
+    V = vavg(cd1,adcp.v,bins(adcp.dep.adcp),α) # :: Velocity
     vs = rotate(V) # :: AlongChannelVelocity
     A = computearea(E,cd1,cs) # :: CrossSectionalArea
     Q = A*vs # :: Discharge
