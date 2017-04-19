@@ -122,8 +122,7 @@ end
 function computedischarge(adcp::ADCPData,cs::CrossSectionData)
     E = adcp.dep.adcp.elevation
     cd1 = atmoscorrect(adcp)
-    cp = quantity(cd1)
-    ts = DischargeData.times(cd1)
+    ts,cp = unzip(cd1)
     V = vavg(cd1,adcp.v,bins(adcp.dep.adcp)) # :: Velocity
     vs = rotate(V) # :: AlongChannelVelocity
     A = computearea(E,cd1,cs) # :: CrossSectionalArea
