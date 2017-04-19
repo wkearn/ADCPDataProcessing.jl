@@ -127,8 +127,8 @@ function computedischarge(adcp::ADCPData,cs::CrossSectionData)
     vs = rotate(V) # :: AlongChannelVelocity
     A = computearea(E,cd1,cs) # :: CrossSectionalArea
     Q = A*vs # :: Discharge
-    Qi = quantity(Q).*detectOrientation(cp,quantity(Q))
-    cd1, Discharge(ts,Qi)
+    Qi = fixOrientation(cd1,Q) # :: Discharge
+    cd1, Qi
 end
 
 # A quick, dirty and not great way to fix the sign of Q
@@ -136,4 +136,9 @@ function detectOrientation(cp::Vector{Float64},Q::Vector{Float64})
     N1 = countnz(sign(gradient(cp)) .== sign(Q))
     N2 = countnz(sign(gradient(cp)) .== sign(-Q))
     N1 > N2 ? 1.0 : -1.0
+end
+
+function fixOrientation(h::Stage,Q::Discharge)
+    s = detectOrientation(quantity(h),quantity(Q))
+    Discharge(DischargeData.times(Q),quantity(Q).*s)
 end
