@@ -26,7 +26,7 @@ type InterpolatedCrossSectionData
     end
 end
 
-function area(cs::InterpolatedCrossSectionData,h,θ=0)
+function area(cs::InterpolatedCrossSectionData,h)
     cszi = cs.cszi
     cg = cszi.knots[1]
     csf(x) = cszi[x]>h?h:cszi[x]
