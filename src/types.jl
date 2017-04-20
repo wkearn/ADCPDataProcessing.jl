@@ -50,9 +50,6 @@ end
 type CrossSection
     location::Creek
     file::String
-    Amax::Real
-    lmax::Real
-    hmax::Real
 end
 
 function Base.show(io::IO,cs::CrossSection)
@@ -83,10 +80,7 @@ end
 function parse_cs{C}(creek::Creek{C},ADCPdatadir=adcp_data_directory[:_ADCPDATA_DIR])
     cs = JSON.parsefile(joinpath(ADCPdatadir,string(C),"METADATA.json"))["cross-section"]
     f = cs["file"]
-    Amax = cs["Amax"]
-    lmax = cs["lmax"]
-    hmax = cs["hmax"]
-    CrossSection(creek,f,Amax,lmax,hmax)
+    CrossSection(creek,f)
 end
 
 Base.hash{C}(x::Creek{C},h::UInt) = hash(C,h)
@@ -111,9 +105,6 @@ end
 function Base.hash(x::CrossSection,h::UInt)
     h = hash(x.location,h)
     h = hash(x.file,h)
-    h = hash(x.Amax,h)
-    h = hash(x.lmax,h)
-    h = hash(x.hmax,h)
 end
 
 Base.:(==)(c1::Creek,c2::Creek) = hash(c1)==hash(c2)
