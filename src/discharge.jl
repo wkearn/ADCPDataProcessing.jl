@@ -28,15 +28,9 @@ end
 
 function area(cs::InterpolatedCrossSectionData,h,θ=0)
     cszi = cs.cszi
-    Amax = cs.cs.Amax
-    lmax = cs.cs.lmax
-    hmax = cs.cs.hmax
-    cg = cszi[cszi.knots[1]]
-    if h > hmax
-        return Amax + (tand(θ)*(h-hmax)+lmax)*(h-hmax)
-    end
-    a,b = findzeros(cszi,h)
-    quadgk(x->(h-cszi[x]),a,b)[1]
+    cg = cszi.knots[1]
+    csf(x) = cszi[x]>h?h:cszi[x]
+    quadgk(x->(h-csf(x)),cg[1],cg[end])[1]
 end
 
 function findzeros(cszi,h)
