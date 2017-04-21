@@ -149,7 +149,7 @@ function detectOrientation(cp::Vector{Float64},Q::Vector{Float64})
     N1 > N2 ? 1.0 : -1.0
 end
 
-function fixOrientation(h::Stage,Q::Quantity)
+function fixOrientation{T<:Quantity}(h::Stage,Q::T)
     s = detectOrientation(quantity(h),quantity(Q))
-    Discharge(DischargeData.times(Q),quantity(Q).*s)
+    T(DischargeData.times(Q),quantity(Q).*s)
 end
