@@ -135,7 +135,8 @@ function computedischarge(adcp::ADCPData,cs::CrossSectionData,flag::Bool,α=cosd
     Q = A*vs # :: Discharge
     Qi = fixOrientation(cd1,Q) # :: Discharge
     if flag
-        return cd1, Qi, A, vs
+        vi = fixOrientation(cd1,vs)
+        return cd1, Qi, A, vi
     else
         return cd1, Qi
     end
@@ -148,7 +149,7 @@ function detectOrientation(cp::Vector{Float64},Q::Vector{Float64})
     N1 > N2 ? 1.0 : -1.0
 end
 
-function fixOrientation(h::Stage,Q::Discharge)
+function fixOrientation(h::Stage,Q::Quantity)
     s = detectOrientation(quantity(h),quantity(Q))
     Discharge(DischargeData.times(Q),quantity(Q).*s)
 end
