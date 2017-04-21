@@ -125,6 +125,22 @@ function computedischarge(adcp::ADCPData,cs::CrossSectionData,α=cosd(25))
     cd1, Qi
 end
 
+function computedischarge(adcp::ADCPData,cs::CrossSectionData,α=cosd(25),flag::Bool)
+    E = adcp.dep.adcp.elevation
+    cd1 = atmoscorrect(adcp)
+    ts,cp = unzip(cd1)
+    V = vavg(cd1,adcp.v,bins(adcp.dep.adcp),α) # :: Velocity
+    vs = rotate(V) # :: AlongChannelVelocity
+    A = computearea(E,cd1,cs) # :: CrossSectionalArea
+    Q = A*vs # :: Discharge
+    Qi = fixOrientation(cd1,Q) # :: Discharge
+    if flag
+        return cd1, Qi, A, vs
+    else
+        return cd1, Qi
+    end
+end
+
 # A quick, dirty and not great way to fix the sign of Q
 function detectOrientation(cp::Vector{Float64},Q::Vector{Float64})
     N1 = countnz(sign(gradient(cp)) .== sign(Q))
