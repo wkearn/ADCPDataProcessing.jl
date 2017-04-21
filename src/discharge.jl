@@ -125,7 +125,7 @@ function computedischarge(adcp::ADCPData,cs::CrossSectionData,α=cosd(25))
     cd1, Qi
 end
 
-function computedischarge(adcp::ADCPData,cs::CrossSectionData,α=cosd(25),flag::Bool)
+function computedischarge(adcp::ADCPData,cs::CrossSectionData,flag::Bool,α=cosd(25))
     E = adcp.dep.adcp.elevation
     cd1 = atmoscorrect(adcp)
     ts,cp = unzip(cd1)
