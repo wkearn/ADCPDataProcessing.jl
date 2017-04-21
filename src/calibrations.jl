@@ -62,3 +62,18 @@ function load_data(cal::CalibrationDeployment,ADCPdatadir=adcp_data_directory[:_
     dc = Discharge(DateTime(D[:DateTime]),D[:SP_Q])
     Calibration(dc,dd)
 end
+
+function load_data(cal::CalibrationDeployment,flag::Bool,ADCPdatadir=adcp_data_directory[:_ADCPDATA_DIR])
+    # Load ADCP data and convert to discharges
+    ad = load_data(cal.deployment)
+    cs = load_data(cal.cs)
+    hh,dd,AA,vv = computedischarge(ad,cs,flag)
+    
+    data_dir = joinpath(ADCPdatadir,
+                        string(cal.deployment.location),
+                        "calibrations",
+                        cal.id)
+    D = readtable(joinpath(data_dir,"discharge_calibrations.csv"))
+    dc = Discharge(DateTime(D[:DateTime]),D[:SP_Q])
+    Calibration(dc,dd),(hh,AA,vv)
+end
