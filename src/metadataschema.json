@@ -1,0 +1,66 @@
+{
+    "$schema": "https://json-schema.org/draft-04/schema#",
+
+    "type": "object",
+    "title": "ADCPDataProcessing METADATA schema",
+    "description": "A schema for the METADATA contained within a TidalFlux database",
+    "required": ["calibrations",
+                 "deployments",
+                 "cross-section",
+                 "gps"],
+                 
+    
+    "properties": {
+        "calibrations": {
+            "type": "array",
+            "items": {"$ref": "#/definitions/calibration"}
+        },
+        "site-name": { "type": "string" },
+        "deployments": {
+            "type": "array",
+            "items": {"$ref": "#/definitions/deployment"}
+        },
+        "cross-section": {
+            "type": "object",
+            "properties": {
+                "file": { "type": "string"},
+                "epsg": { "type": "number"}
+            }
+        },
+        "gps": {
+            "type": "object",
+            "properties": {
+                "east": { "type": "number"},
+                "north": {"type": "number"},
+                "epsg": { "type": "number"}
+            }
+        }
+    },
+
+    "definitions":{
+        "deployment": {
+            "type": "object",
+            "properties": {
+                "deltaT": {"type": "number"},
+                "hasAnalog": {"type": "boolean"},
+                "serialNumber": {"type": "string"},
+                "blankingDistance": {"type": "number"},
+                "startDate": {"type": "string"},
+                "id": {"type": "string"},
+                "endDate": {"type": "string"},
+                "elevation": {"type": "number"},
+                "cellSize": {"type": "number"},
+                "nCells": {"type": "number"}
+            }
+        },
+        "calibration": {
+            "type": "object",
+            "properties": {
+                "startDate": {"type": "string"},
+                "id": {"type": "string"},
+                "endDate": {"type": "string"},
+                "deployment": {"type": "string"}
+            }
+        }
+    }        
+}
