@@ -20,11 +20,11 @@ function Base.show(io::IO,cal::CalibrationDeployment)
     print(io,cal.deployment)    
 end
 
-function parse_cals{C}(creek::Creek{C},ADCPdatadir=adcp_data_directory[:_ADCPDATA_DIR])
+function parse_cals{C}(creek::Creek{C},ADCPdatadir=adcp_data_directory[:_ADCPDATA_DIR],schema=metadataschema)
     cs = parse_cs(creek)
     deps = parse_deps(creek)
     ids = map(x->x.id,deps)
-    d = JSON.parsefile(joinpath(ADCPdatadir,string(C),"METADATA.json"))
+    d = metadataload(creek,ADCPdatadir,schema)
     cals = CalibrationDeployment[]
     for cal in d["calibrations"]
         id = cal["id"]
