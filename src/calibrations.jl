@@ -59,7 +59,9 @@ function load_data(cal::CalibrationDeployment,ADCPdatadir=adcp_data_directory[:_
                         "calibrations",
                         cal.id)
     D = readtable(joinpath(data_dir,"discharge_calibrations.csv"))
-    dc = Discharge(DateTime(D[:DateTime]),D[:SP_Q])
+    # We need to convert the DataArray to an Array{Float64}
+    # But only after the subtyping changes in DischargeData
+    dc = Discharge(DateTime(D[:DateTime]),float(D[:SP_Q]))
     Calibration(dc,dd)
 end
 
@@ -74,6 +76,6 @@ function load_data(cal::CalibrationDeployment,flag::Bool,ADCPdatadir=adcp_data_d
                         "calibrations",
                         cal.id)
     D = readtable(joinpath(data_dir,"discharge_calibrations.csv"))
-    dc = Discharge(DateTime(D[:DateTime]),D[:SP_Q])
+    dc = Discharge(DateTime(D[:DateTime]),float(D[:SP_Q]))
     Calibration(dc,dd),hh,AA,vv
 end
