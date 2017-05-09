@@ -1,4 +1,4 @@
-using PIEMetData, DataFrames, Interpolations, Base.Dates
+using PIEMetData, DataFrames, Interpolations, Base.Dates, Measurements
 
 export atmoscorrect, InterpolatedCrossSectionData, ADCPDataCP,
 area, computedischarge
@@ -100,7 +100,7 @@ end
 function rotate(V::Velocity)
     vma = detupleize(quantity(V))
     ts = DischargeData.times(V)
-    l,Z = eig(cov(vma))
+    l,Z = eig(cov(value(vma)))
     AlongChannelVelocity(ts,vma*Z[:,3])
 end
 
