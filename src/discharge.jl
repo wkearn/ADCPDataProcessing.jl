@@ -55,10 +55,10 @@ end
 
 # We need a way to turn a Nx3 array into an N vector of
 # tuples
-tupleize(X::AbstractArray{Float64,2}) = [(X[i,:]...) for i in 1:size(X,1)]
-detupleize(T::AbstractVector{Tuple{Float64,Float64,Float64}}) = vcat([[T[i]...]' for i in 1:length(T)]...)
+tupleize(X) = [(X[i,:]...) for i in 1:size(X,1)]
+detupleize(T) = vcat([[T[i]...]' for i in 1:length(T)]...)
 
-function vavg(pq::Stage,V::Array{Float64,3},bs::AbstractVector,α=cosd(25))
+function vavg{T<:AbstractFloat}(pq::Stage,V::Array{T,3},bs::AbstractVector,α=cosd(25))
     p = quantity(pq)
     t = DischargeData.times(pq)
     tops = zeros(Int,length(p))
@@ -66,7 +66,7 @@ function vavg(pq::Stage,V::Array{Float64,3},bs::AbstractVector,α=cosd(25))
         q = find(x->x<p[i]*α,bs)
         tops[i] = isempty(q) ? 0 : q[end]
     end
-    vma = zeros(length(p),3)
+    vma = zeros(T,length(p),3)
     for i in 1:length(p)
         for j in 1:3
             r = tops[i]
@@ -143,7 +143,7 @@ function computedischarge(adcp::ADCPData,cs::CrossSectionData,flag::Bool,α=cosd
 end
 
 # A quick, dirty and not great way to fix the sign of Q
-function detectOrientation(cp::Vector{Float64},Q::Vector{Float64})
+function detectOrientation(cp,Q)
     N1 = countnz(sign(gradient(cp)) .== sign(Q))
     N2 = countnz(sign(gradient(cp)) .== sign(-Q))
     N1 > N2 ? 1.0 : -1.0
