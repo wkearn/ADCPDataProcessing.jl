@@ -13,6 +13,7 @@ type ADCPData
     dep::Deployment
     p::Vector{Float64}
     v::Array{Float64,3}
+    a::Array{Float64,3}
     t::Vector{DateTime}
     temp::Vector{Float64}
     pitch::Vector{Float64}
@@ -30,6 +31,7 @@ end
 deployment(data::ADCPData) = data.dep
 pressures(data::ADCPData) = data.p
 velocities(data::ADCPData) = data.v
+amplitudes(data::ADCPData) = data.a
 # Times is also exported by DischargeData...
 times(data::ADCPData) = data.t
 temperatures(data::ADCPData) = data.temp
@@ -57,6 +59,8 @@ function load_data(dep::Deployment,ADCPdatadir=adcp_data_directory[:_ADCPDATA_DI
     p = vec(readdlm(joinpath(data_dir,"pressure.csv")))
     v = vec(readdlm(joinpath(data_dir,"velocities.csv")))
     v = reshape_velocities(v,dep)
+    a = vec(readdlm(joinpath(data_dir,"amplitudes.csv")))
+    a = reshape_velocities(a,dep)
     t = vec(readdlm(joinpath(data_dir,"times.csv")))
     t = DateTime.(t)
     temp = vec(readdlm(joinpath(data_dir,"temperature.csv")))
@@ -70,7 +74,7 @@ function load_data(dep::Deployment,ADCPdatadir=adcp_data_directory[:_ADCPDATA_DI
         a1 = Nullable{Vector{Float64}}()
         a2 = Nullable{Vector{Float64}}()
     end
-    ADCPData(dep,p,v,t,temp,pitch,roll,heading,a1,a2)
+    ADCPData(dep,p,v,a,t,temp,pitch,roll,heading,a1,a2)
 end
 
 function reshape_velocities(v::Vector{Float64},dep::Deployment)
