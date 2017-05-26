@@ -2,8 +2,6 @@ using PIEMetData, DataFrames, Interpolations, Base.Dates, Measurements, QuadGK
 
 export atmoscorrect, InterpolatedCrossSectionData, area, computedischarge
 
-# We should change types to an ADCPDataCP or something here
-# so that we don't use the wrong pressure data at some point
 function atmoscorrect(adcp::ADCPData)
     M = parsemet(year(deployment(adcp).startDate))
     t = times(adcp)
