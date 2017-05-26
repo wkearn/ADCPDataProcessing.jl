@@ -1,4 +1,4 @@
-using PIEMetData, DataFrames, Interpolations, Base.Dates, Measurements
+using PIEMetData, DataFrames, Interpolations, Base.Dates, Measurements, QuadGK
 
 export atmoscorrect, InterpolatedCrossSectionData, ADCPDataCP,
 area, computedischarge
@@ -30,7 +30,7 @@ function area(cs::InterpolatedCrossSectionData,h)
     cszi = cs.cszi
     cg = cszi.knots[1]
     csf(x) = cszi[x]>h?h:cszi[x]
-    quadgk(x->(h-csf(x)),cg[1],cg[end])[1]
+    QuadGK.quadgk(x->(h-csf(x)),cg[1],cg[end])[1]
 end
 
 function findzeros(cszi,h)

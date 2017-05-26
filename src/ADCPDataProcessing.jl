@@ -1,6 +1,6 @@
 module ADCPDataProcessing
 
-using DischargeData, JSON, DataFrames, QuadGK
+using DischargeData, JSON, DataFrames
 
 include("databases.jl")
 include("types.jl")
