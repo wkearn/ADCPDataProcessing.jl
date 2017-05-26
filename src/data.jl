@@ -9,10 +9,12 @@ rolls,
 headings,
 analog
 
-type ADCPData
+using Measurements
+
+type ADCPData{T<:AbstractFloat}
     dep::Deployment
     p::Vector{Float64}
-    v::Array{Float64,3}
+    v::Array{T,3}
     a::Array{Float64,3}
     t::Vector{DateTime}
     temp::Vector{Float64}
@@ -68,8 +70,8 @@ function load_data(dep::Deployment,ADCPdatadir=adcp_data_directory[:_ADCPDATA_DI
     roll = vec(readdlm(joinpath(data_dir,"roll.csv")))
     heading = vec(readdlm(joinpath(data_dir,"heading.csv")))
     if dep.adcp.hasAnalog
-        a1 = vec(readdlm(joinpath(data_dir,"analog1.csv")))
-        a2 = vec(readdlm(joinpath(data_dir,"analog2.csv")))
+        a1 = Nullable{Vector{Float64}}(vec(readdlm(joinpath(data_dir,"analog1.csv"))))
+        a2 = Nullable{Vector{Float64}}(vec(readdlm(joinpath(data_dir,"analog2.csv"))))
     else
         a1 = Nullable{Vector{Float64}}()
         a2 = Nullable{Vector{Float64}}()
