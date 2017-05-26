@@ -95,7 +95,7 @@ end
 function rotate(V::Velocity{Tuple{Measurement{Float64},Measurement{Float64},Measurement{Float64}}})
     vma = detupleize(quantity(V))
     ts = DischargeData.times(V)
-    l,Z = eig(cov(value(vma)))
+    l,Z = eig(cov(Measurements.value.(vma)))
     AlongChannelVelocity(ts,vma*Z[:,3])
 end
 
