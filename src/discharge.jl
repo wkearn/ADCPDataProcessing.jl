@@ -97,10 +97,17 @@ function applyPolyFit(a,h::Vector{Float64})
     b
 end
 
-function rotate(V::Velocity)
+function rotate(V::Velocity{Tuple{Measurement{Float64},Measurement{Float64},Measurement{Float64}}})
     vma = detupleize(quantity(V))
     ts = DischargeData.times(V)
     l,Z = eig(cov(value(vma)))
+    AlongChannelVelocity(ts,vma*Z[:,3])
+end
+
+function rotate(V::Velocity{Tuple{Float64,Float64,Float64}})
+    vma = detupleize(quantity(V))
+    ts = DischargeData.times(V)
+    l,Z = eig(cov(vma))
     AlongChannelVelocity(ts,vma*Z[:,3])
 end
 
