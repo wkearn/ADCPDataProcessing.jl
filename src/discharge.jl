@@ -151,8 +151,8 @@ end
 
 # A quick, dirty and not great way to fix the sign of Q
 function detectOrientation(cp,Q)
-    N1 = countnz(sign(gradient(cp)) .== sign(Q))
-    N2 = countnz(sign(gradient(cp)) .== sign(-Q))
+    N1 = countnz(sign.(gradient(cp)) .== sign.(Q))
+    N2 = countnz(sign.(gradient(cp)) .== sign.(-Q))
     N1 > N2 ? 1.0 : -1.0
 end
 
