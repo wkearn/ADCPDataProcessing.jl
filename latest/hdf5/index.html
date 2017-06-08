@@ -1,0 +1,241 @@
+<!DOCTYPE html>
+<!--[if IE 8]><html class="no-js lt-ie9" lang="en" > <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js" lang="en" > <!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <meta name="author" content="Will Kearney">
+  <link rel="shortcut icon" href="../img/favicon.ico">
+  <title>HDF5 Support - ADCPDataProcessing.jl</title>
+  <link href='https://fonts.googleapis.com/css?family=Lato:400,700|Roboto+Slab:400,700|Inconsolata:400,700' rel='stylesheet' type='text/css'>
+
+  <link rel="stylesheet" href="../css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="../css/theme_extra.css" type="text/css" />
+  <link rel="stylesheet" href="../css/highlight.css">
+  <link href="../assets/Documenter.css" rel="stylesheet">
+  
+  <script>
+    // Current page data
+    var mkdocs_page_name = "HDF5 Support";
+    var mkdocs_page_input_path = "hdf5.md";
+    var mkdocs_page_url = "/hdf5/";
+  </script>
+  
+  <script src="../js/jquery-2.1.1.min.js"></script>
+  <script src="../js/modernizr-2.8.3.min.js"></script>
+  <script type="text/javascript" src="../js/highlight.pack.js"></script> 
+  
+</head>
+
+<body class="wy-body-for-nav" role="document">
+
+  <div class="wy-grid-for-nav">
+
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side stickynav">
+      <div class="wy-side-nav-search">
+        <a href=".." class="icon icon-home"> ADCPDataProcessing.jl</a>
+        <div role="search">
+  <form id ="rtd-search-form" class="wy-form" action="../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+  </form>
+</div>
+      </div>
+
+      <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+	<ul class="current">
+	  
+          
+            <li class="toctree-l1">
+		
+    <a class="" href="..">Home</a>
+	    </li>
+          
+            <li class="toctree-l1 current">
+		
+    <a class="current" href="./">HDF5 Support</a>
+    <ul class="subnav">
+            
+    <li class="toctree-l2"><a href="#hdf5-support">HDF5 Support</a></li>
+    
+        <ul>
+        
+            <li><a class="toctree-l3" href="#hdf5-schema">HDF5 Schema</a></li>
+        
+        </ul>
+    
+
+    <li class="toctree-l2"><a href="#functions-for-dealing-with-the-hdf5-database">Functions for dealing with the HDF5 database</a></li>
+    
+
+    </ul>
+	    </li>
+          
+        </ul>
+      </div>
+      &nbsp;
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" role="navigation" aria-label="top navigation">
+        <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+        <a href="..">ADCPDataProcessing.jl</a>
+      </nav>
+
+      
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="breadcrumbs navigation">
+  <ul class="wy-breadcrumbs">
+    <li><a href="..">Docs</a> &raquo;</li>
+    
+      
+    
+    <li>HDF5 Support</li>
+    <li class="wy-breadcrumbs-aside">
+      
+        <a href="https://github.com/wkearn/ADCPDataProcessing.jl/edit/master/docs/hdf5.md"
+          class="icon icon-github"> Edit on GitHub</a>
+      
+    </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main">
+            <div class="section">
+              
+                <p><a id='HDF5-Support-1'></a></p>
+<h1 id="hdf5-support">HDF5 Support</h1>
+<p><a id='HDF5-Schema-1'></a></p>
+<h2 id="hdf5-schema">HDF5 Schema</h2>
+<p>The HDF5 file produced by <a href="./#ADCPDataProcessing.database2HDF5"><code>database2HDF5</code></a> follows the following schema</p>
+<ul>
+<li>
+<p><code>data.h5</code> – This is the HDF5 file. Each site has a different HDF5 file, but they are all called <code>data.h5</code></p>
+<ul>
+<li>
+<p><code>gps</code> – This <strong>group</strong> contains information on the location of the site stored as attributes</p>
+<ul>
+<li><code>epsg</code> – This <strong>attribute</strong> gives the EPSG code for the projection in which the coordinates are stored</li>
+<li><code>east</code> – This <strong>attribute</strong> gives the coordinate in the east direction</li>
+<li>
+<p><code>north</code> – This <strong>attribute</strong> gives the coordinate in the north direction</p>
+<ul>
+<li><code>cross-section</code> – This <strong>group</strong> contains the channel cross section of the site</li>
+</ul>
+</li>
+<li>
+<p><code>epsg</code> – This <strong>attribute</strong> gives the EPSG code for the projection in which the GPS cross section is stored</p>
+</li>
+<li><code>north</code> – This <strong>dataset</strong> is an array with the north coordinates for the points making up the cross section</li>
+<li><code>east</code> – This <strong>dataset</strong> is an array with the east coordinates for the points making up the cross section</li>
+<li><code>elevation</code> – This <strong>dataset</strong> gives the elevation of the points making up the cross section</li>
+<li>
+<p><code>distance</code> – This <strong>dataset</strong> gives the distance along the cross section from an arbitrary starting point</p>
+<ul>
+<li><code>deployments</code> – This <strong>group</strong> contains each of the ADCP deployments at the site</li>
+</ul>
+</li>
+<li>
+<p><code>$id</code> – This <strong>group</strong> contains all of the data and metadata for a single deployment. <code>$id</code> is a random code used to identify the deployment</p>
+<ul>
+<li><code>serialNumber</code> – This <strong>attribute</strong> is the serial number of the ADCP used in this deployment</li>
+<li><code>startDate</code> – This <strong>attribute</strong> is the start date/time of the deployment</li>
+<li><code>endDate</code> – This <strong>attribute</strong> is the end date/time of the deployment</li>
+<li><code>deltaT</code> – This <strong>attribute</strong> is the sampling period in seconds</li>
+<li><code>blankingDistance</code> – This <strong>attribute</strong> is the blanking distance above the ADCP in meters</li>
+<li><code>cellSize</code> – This <strong>attribute</strong> is the size of each measurement cell in meters</li>
+<li><code>nCells</code> – This <strong>attribute</strong> is the number of measurement cells recorded by the ADCP</li>
+<li><code>elevation</code> – This <strong>attribute</strong> is the elevation at which the ADCP is deployed, in the frame of the cross section</li>
+<li><code>hasAnalog</code> – This <strong>attribute</strong> indicates whether an analog input was attached to the ADCP</li>
+<li><code>obsSerialNumber</code> – This <strong>optional attribute</strong> is the serial number of the OBS sensor deployed with the ADCP. It exists only if <code>hasAnalog==true</code></li>
+<li><code>validAnalog</code> – This <strong>optional attribute</strong> indicates whether the analog input data are usable. It exists only if <code>hasAnalog==true</code></li>
+<li><code>amplitude</code> – This <strong>dataset</strong> is an (<code>nCells</code>,<code>N</code>,3) array giving the return signal amplitudes in counts</li>
+<li><code>heading</code> – This <strong>dataset</strong> is an array of length <code>N</code> giving the heading recorded by the internal compass of the ADCP in degrees</li>
+<li><code>pitch</code> – This <strong>dataset</strong> is an array of length <code>N</code> giving the pitch about the short horizontal axis of the ADCP in degrees</li>
+<li><code>roll</code> – This <strong>dataset</strong> is an array of length <code>N</code> giving the roll about the long horizontal axis of the ADCP in degrees</li>
+<li><code>pressure</code> – This <strong>dataset</strong> is an array of length <code>N</code> giving the pressure recorded by the internal pressure sensor in dbar</li>
+<li><code>temperature</code> – This <strong>dataset</strong> is an array of length <code>N</code> giving the temperature in degrees C</li>
+<li><code>time</code> – This <strong>dataset</strong> is an array of length <code>N</code> of strings giving the date and time of each measurement</li>
+<li><code>velocity</code> – This <strong>dataset</strong> is an array of size (<code>nCells</code>,<code>N</code>,3) giving the water column velocities in m/s</li>
+<li><code>analog1</code> – This <strong>optional dataset</strong> is an array of length <code>N</code> giving the signal recorded at analog input #1 in mV. It exists if <code>hasAnalog==true</code></li>
+<li><code>analog2</code> – This <strong>optional dataset</strong> is an array of length <code>N</code> giving the signal recorded at analog input #2 in mV. It exists if <code>hasAnalog==true</code><ul>
+<li><code>calibrations</code></li>
+</ul>
+</li>
+</ul>
+</li>
+<li>
+<p><code>startDate</code> – This <strong>attribute</strong> gives the start date of the calibration</p>
+</li>
+<li><code>endDate</code> – This <strong>attribute</strong> gives the end date of the calibration</li>
+<li><code>deployment</code> – This <strong>attribute</strong> gives the id of the ADCP deployment during which the calibration took place</li>
+<li><code>discharge</code> – This <strong>dataset</strong> provides the discharges measured by the calibrating instrument in m^3/s</li>
+<li><code>discharge_times</code> – This <strong>dataset</strong> provides the dates and times at which the calibrating instrument recorded discharges</li>
+<li><code>tss</code> – This <strong>optional dataset</strong> provides the TSS measurements in g/L</li>
+<li><code>tss_times</code> – This <strong>optional dataset</strong> provides the dates ans times at which the TSS was measured.</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+<p><a id='Functions-for-dealing-with-the-HDF5-database-1'></a></p>
+<h1 id="functions-for-dealing-with-the-hdf5-database">Functions for dealing with the HDF5 database</h1>
+<p><a id='ADCPDataProcessing.database2HDF5' href='#ADCPDataProcessing.database2HDF5'>#</a>
+<strong><code>ADCPDataProcessing.database2HDF5</code></strong> &mdash; <em>Function</em>.</p>
+<pre><code>database2HDF5(creek[, ADCPdatadir])
+</code></pre>
+
+<p>Convert a database entry corresponding to the given Creek into the HDF5 format.</p>
+<p>See the documentation (<a href="./#HDF5-Schema-1">HDF5 Schema</a>) for the schema for the HDF5 generated by this function.</p>
+<p><a target='_blank' href='https://github.com/wkearn/ADCPDataProcessing.jl/tree/b18fbdb35c04594b161f48da2ca21bf89302f8e1/src/hdf5.jl#L3-L9' class='documenter-source'>source</a><br></p>
+              
+            </div>
+          </div>
+          <footer>
+  
+    <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
+      
+      
+        <a href=".." class="btn btn-neutral" title="Home"><span class="icon icon-circle-arrow-left"></span> Previous</a>
+      
+    </div>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <!-- Copyright etc -->
+    
+  </div>
+
+  Built with <a href="http://www.mkdocs.org">MkDocs</a> using a <a href="https://github.com/snide/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>.
+</footer>
+	  
+        </div>
+      </div>
+
+    </section>
+    
+  </div>
+
+  <div class="rst-versions" role="note" style="cursor: pointer">
+    <span class="rst-current-version" data-toggle="rst-current-version">
+      
+          <a href="https://github.com/wkearn/ADCPDataProcessing.jl" class="fa fa-github" style="float: left; color: #fcfcfc"> GitHub</a>
+      
+      
+        <span><a href=".." style="color: #fcfcfc;">&laquo; Previous</a></span>
+      
+      
+    </span>
+</div>
+    <script src="../js/theme.js"></script>
+      <script src="../assets/mathjaxhelper.js"></script>
+
+</body>
+</html>
