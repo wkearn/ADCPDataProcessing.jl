@@ -43,6 +43,7 @@
             "properties": {
                 "deltaT": {"type": "number"},
                 "hasAnalog": {"type": "boolean"},
+                "obsSerialNumber": {"type": "string"},
                 "validAnalog": {"type": "boolean"},
                 "serialNumber": {"type": "string"},
                 "blankingDistance": {"type": "number"},
