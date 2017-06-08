@@ -17,3 +17,4 @@ docs_dir: 'build'
 
 pages:
   - Home: index.md
+  - HDF5 Support: hdf5.md
