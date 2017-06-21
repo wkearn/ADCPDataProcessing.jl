@@ -87,3 +87,22 @@ function database2HDF5(creek::Creek,ADCPdatadir=adcp_data_directory[:_ADCPDATA_D
         end
     end
 end
+
+function h5load_data(dep::Deployment,ADCPdatadir=adcp_data_directory[:_ADCPDATA_DIR])
+    h5file = joinpath(ADCPdatadir,string(dep.location),"data.h5")
+    h5open(h5file,"r") do fid
+        d = read(fid,"deployments")
+        dd = d[dep.id]
+        p = dd["pressure"]
+        v = dd["velocity"]
+        a = dd["amplitude"]
+        t = DateTime.(dd["time"])
+        temp = dd["temperature"]
+        pitch = dd["pitch"]
+        roll = dd["roll"]
+        heading = dd["heading"]
+        a1 = dep.adcp.hasAnalog ? Nullable{Vector{Float64}}(dd["analog1"]) : Nullable{Vector{Float64}}()
+        a2 = dep.adcp.hasAnalog ? Nullable{Vector{Float64}}(dd["analog2"]) : Nullable{Vector{Float64}}()        
+        ADCPData(dep,p,v,a,t,temp,pitch,roll,heading,a1,a2)
+    end
+end
