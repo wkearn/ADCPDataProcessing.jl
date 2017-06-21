@@ -112,6 +112,11 @@ function h5load_data(dep::Deployment,ADCPdatadir=adcp_data_directory[:_ADCPDATA_
     end
 end
 
+"""
+    h5load_data(cs[, ADCPdatadir])
+
+Load cross-section data from appropriate HDF5 file.
+"""
 function h5load_data(cs::CrossSection,ADCPdatadir=adcp_data_directory[:_ADCPDATA_DIR])
     h5file = joinpath(ADCPdatadir,string(cs.location),"data.h5")
     h5open(h5file,"r") do fid
