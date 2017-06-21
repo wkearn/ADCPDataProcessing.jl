@@ -91,7 +91,7 @@ end
 """
     h5load_data(dep[, ADCPdatadir])
 
-Load ADCP data from the appropriate HDF5 file
+Load ADCP data from the appropriate HDF5 file.
 """
 function h5load_data(dep::Deployment,ADCPdatadir=adcp_data_directory[:_ADCPDATA_DIR])
     h5file = joinpath(ADCPdatadir,string(dep.location),"data.h5")
