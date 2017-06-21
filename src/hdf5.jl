@@ -111,3 +111,13 @@ function h5load_data(dep::Deployment,ADCPdatadir=adcp_data_directory[:_ADCPDATA_
         ADCPData(dep,p,v,a,t,temp,pitch,roll,heading,a1,a2)
     end
 end
+
+function h5load_data(cs::CrossSection,ADCPdatadir=adcp_data_directory[:_ADCPDATA_DIR])
+    h5file = joinpath(ADCPdatadir,string(cs.location),"data.h5")
+    h5open(h5file,"r") do fid
+        d = read(fid,"cross-section")
+        X = d["distance"]
+        Z = d["elevation"]
+        CrossSectionData(cs,X,Z)
+    end
+end
