@@ -88,6 +88,11 @@ function database2HDF5(creek::Creek,ADCPdatadir=adcp_data_directory[:_ADCPDATA_D
     end
 end
 
+"""
+    h5load_data(dep[, ADCPdatadir])
+
+Load ADCP data from the appropriate HDF5 file
+"""
 function h5load_data(dep::Deployment,ADCPdatadir=adcp_data_directory[:_ADCPDATA_DIR])
     h5file = joinpath(ADCPdatadir,string(dep.location),"data.h5")
     h5open(h5file,"r") do fid

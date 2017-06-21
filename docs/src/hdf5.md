@@ -57,4 +57,5 @@ The HDF5 file produced by [`database2HDF5`](@ref) follows the following schema
 
 ```@docs
 database2HDF5
+h5load_data
 ```
