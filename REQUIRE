@@ -1,6 +1,7 @@
 julia 0.6-
 DischargeData
 PIEMetData
+TidalFluxCalibrations
 JSON
 HDF5
 DataFrames
