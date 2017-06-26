@@ -53,18 +53,15 @@ end
 tupleize(X) = [(X[i,:]...) for i in 1:size(X,1)]
 detupleize(T) = vcat([[T[i]...]' for i in 1:length(T)]...)
 
+tops(H::Stage,bs,α=cosd(25)) = [findfirst(x->x>quantity(H)[i]*α,bs)-1 for i in eachindex(H)]
+
 function vavg{T<:AbstractFloat}(pq::Stage,V::Array{T,3},bs::AbstractVector,α=cosd(25))
-    p = quantity(pq)
     t = DischargeData.times(pq)
-    tops = zeros(Int,length(p))
-    for i in 1:length(p)
-        q = find(x->x<p[i]*α,bs)
-        tops[i] = isempty(q) ? 0 : q[end]
-    end
-    vma = zeros(T,length(p),3)
-    for i in 1:length(p)
+    tt = tops(pq,bs,α)
+    vma = zeros(T,length(pq),3)
+    for i in 1:length(pq)
         for j in 1:3
-            r = tops[i]
+            r = tt[i]
             if r == 0
                 vma[i,j] = 0.0
             else
