@@ -129,3 +129,18 @@ function h5load_data(cs::CrossSection,ADCPdatadir=adcp_data_directory[:_ADCPDATA
         CrossSectionData(cs,X,Z)
     end
 end
+
+function h5load_data(cal::CalibrationDeployment,ADCPdatadir=adcp_data_directory[:_ADCPDATA_DIR])
+    ad = h5load_data(cal.deployment)
+    cs = load_data(cal.cs)
+    _,dd = computedischarge(ad,cs)
+
+    h5file = joinpath(ADCPdatadir,string(cal.deployment.location),"data.h5")
+
+    h5open(h5file,"r") do fid
+        d = read(fid,"calibrations")
+        dt = d[cal.id]
+        dc = Discharge(DateTime.(dt["discharge_times"]),dt["discharge"])
+        Calibration(dc,dd)
+    end
+end
