@@ -24,7 +24,10 @@ function database2HDF5(creek::Creek,ADCPdatadir=adcp_data_directory[:_ADCPDATA_D
         csd,csh = readdlm(joinpath(data_dir,"cross-section.csv"),',',header=true)
         cs = g_create(file,"cross-section")
         # Note that these indices might not be the same for all creeks
-        idxn,idxe,idxz,idxd = findin(csh,["North","East","Elevation","Distance"])
+        idxn = findin(csh,["North"])[1]
+        idxe = findin(csh,["East"])[1]
+        idxz = findin(csh,["Elevation"])[1]
+        idxd = findin(csh,["Distance"])[1]
         cs["north"] = Vector{Float64}(csd[1:end-1,idxn])
         cs["east"]  = Vector{Float64}(csd[1:end-1,idxe])
         cs["elevation"] = Vector{Float64}(csd[1:end-1,idxz])
