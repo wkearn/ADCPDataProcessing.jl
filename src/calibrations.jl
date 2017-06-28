@@ -12,6 +12,7 @@ type CalibrationDeployment
     cs::CrossSection
     startDate::DateTime
     endDate::DateTime
+    quantities::Array{String,1}
 end
 
 function Base.show(io::IO,cal::CalibrationDeployment)
@@ -22,6 +23,9 @@ function Base.show(io::IO,cal::CalibrationDeployment)
     print(io,cal.deployment)    
 end
 
+quantities_map = Dict{String,UnionAll}("discharge" => Discharge,
+                                       "tss" => TSS)
+                                      
 function parse_cals{C}(creek::Creek{C},ADCPdatadir=adcp_data_directory[:_ADCPDATA_DIR],schema=metadataschema)
     cs = parse_cs(creek)
     deps = parse_deps(creek)
@@ -33,8 +37,9 @@ function parse_cals{C}(creek::Creek{C},ADCPdatadir=adcp_data_directory[:_ADCPDAT
         dep = cal["deployment"]
         sD = DateTime(cal["startDate"])
         eD = DateTime(cal["endDate"])
+        qs = cal["quantities"]
         dep_match = findfirst(ids,dep)
-        push!(cals,CalibrationDeployment(id,deps[dep_match],cs,sD,eD))
+        push!(cals,CalibrationDeployment(id,deps[dep_match],cs,sD,eD,qs))
     end
     cals
 end

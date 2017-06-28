@@ -61,7 +61,8 @@
                 "startDate": {"type": "string"},
                 "id": {"type": "string"},
                 "endDate": {"type": "string"},
-                "deployment": {"type": "string"}
+                "deployment": {"type": "string"},
+                "quantities": {"type": "array"}
             }
         }
     }        
