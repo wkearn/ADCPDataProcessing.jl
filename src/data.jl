@@ -34,7 +34,7 @@ deployment(data::ADCPData) = data.dep
 pressures(data::ADCPData) = data.p
 velocities(data::ADCPData) = data.v
 amplitudes(data::ADCPData) = data.a
-# Times is also exported by DischargeData...
+# Times is also exported by TidalFluxQuantities...
 times(data::ADCPData) = data.t
 temperatures(data::ADCPData) = data.temp
 pitches(data::ADCPData) = data.pitch

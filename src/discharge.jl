@@ -56,7 +56,7 @@ detupleize(T) = vcat([[T[i]...]' for i in 1:length(T)]...)
 tops(H::Stage,bs,α=cosd(25)) = [findfirst(x->x>quantity(H)[i]*α,bs)-1 for i in eachindex(H)]
 
 function vavg{T<:AbstractFloat}(pq::Stage,V::Array{T,3},bs::AbstractVector,α=cosd(25))
-    t = DischargeData.times(pq)
+    t = TidalFluxQuantities.times(pq)
     tt = tops(pq,bs,α)
     vma = zeros(T,length(pq),3)
     for i in 1:length(pq)
@@ -91,14 +91,14 @@ end
 
 function rotate(V::Velocity{Tuple{Measurement{Float64},Measurement{Float64},Measurement{Float64}}})
     vma = detupleize(quantity(V))
-    ts = DischargeData.times(V)
+    ts = TidalFluxQuantities.times(V)
     l,Z = eig(cov(Measurements.value.(vma)))
     AlongChannelVelocity(ts,vma*Z[:,3])
 end
 
 function rotate(V::Velocity{Tuple{Float64,Float64,Float64}})
     vma = detupleize(quantity(V))
-    ts = DischargeData.times(V)
+    ts = TidalFluxQuantities.times(V)
     l,Z = eig(cov(vma))
     AlongChannelVelocity(ts,vma*Z[:,3])
 end
@@ -150,5 +150,5 @@ end
 
 function fixOrientation{T<:Quantity}(h::Stage,Q::T)
     s = detectOrientation(quantity(h),quantity(Q))
-    T(DischargeData.times(Q),quantity(Q).*s)
+    T(TidalFluxQuantities.times(Q),quantity(Q).*s)
 end

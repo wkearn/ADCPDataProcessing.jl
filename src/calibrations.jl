@@ -67,7 +67,7 @@ function load_data(cal::CalibrationDeployment,ADCPdatadir=adcp_data_directory[:_
                         cal.id)
     D = readtable(joinpath(data_dir,"discharge_calibrations.csv"))
     # We need to convert the DataArray to an Array{Float64}
-    # But only after the subtyping changes in DischargeData
+    # But only after the subtyping changes in TidalFluxQuantities
     dc = Discharge(DateTime(D[:DateTime]),float(D[:SP_Q]))
     Calibration(dc,dd)
 end
