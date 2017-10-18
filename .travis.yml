@@ -22,3 +22,4 @@ after_success:
   - julia -e 'Pkg.add("Documenter")'
   - julia -e 'cd(Pkg.dir("ADCPDataProcessing")); include(joinpath("docs","make.jl"))'
 dist: trusty
+sudo: required
