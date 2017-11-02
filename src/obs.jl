@@ -1,3 +1,9 @@
+export OBS3,
+    AnalogLow,
+    AnalogHigh,
+    Turbidity,
+    BU_obs_dict
+
 struct OBS3
     serialNumber::String
     lowcoeffs::Vector{Float64}
