@@ -26,7 +26,7 @@ analog data
 """
 @quantity AnalogHigh Real
 
-AnalogHigh(adcp::ADCPData) = AnalogHigh(adcp.t,get(adcp.a1))
+AnalogHigh(adcp::ADCPData) = AnalogHigh(adcp.t,get(adcp.a2))
 
 """
 An ``R``-valued time series for turbidity
