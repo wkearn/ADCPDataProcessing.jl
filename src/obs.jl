@@ -12,11 +12,15 @@ analog data
 """
 @quantity AnalogLow Real
 
+AnalogLow(adcp::ADCPData) = AnalogLow(adcp.t,get(adcp.a1))
+
 """
 An ``R``-valued time series for high-range
 analog data
 """
 @quantity AnalogHigh Real
+
+AnalogHigh(adcp::ADCPData) = AnalogHigh(adcp.t,get(adcp.a1))
 
 """
 An ``R``-valued time series for turbidity
@@ -66,7 +70,8 @@ function Turbidity(a::AnalogHigh,obs::OBS3)
 end
 
 ## These are the Boston University OBS sensors. I am not sure how best to
-## extend these
+## extend these. Perhaps there should be a special BU module somewhere.
+## Or a global metadata that can also store things like the data directories
 
 BU_obs_dict = Dict(
     "T8271" => OBS3("T8271",[0.0741962;0.0456691;1.40e-6],250,[-0.1695174;0.1828727;2.30e-5],1000),
