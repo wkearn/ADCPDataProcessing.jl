@@ -3,6 +3,7 @@ export ADCP, Deployment, CrossSection, bins, parse_deps, parse_cs
 type ADCP
     serialNumber::String
     hasAnalog::Bool
+    obsSerialNumber::String
     blankingDistance::Real
     cellSize::Real
     nCells::Int
@@ -65,7 +66,8 @@ function parse_deps{C}(creek::Creek{C},ADCPdatadir=adcp_data_directory[:_ADCPDAT
         nC = dep["nCells"]
         dT = dep["deltaT"]
         aZ = dep["elevation"]
-        push!(deps,Deployment(id,creek,sd,ed,ADCP(sN,hA,bD,cS,nC,dT,aZ)))
+        oSN= get(dep,"obsSerialNumber","")
+        push!(deps,Deployment(id,creek,sd,ed,ADCP(sN,hA,oSN,bD,cS,nC,dT,aZ)))
     end
     deps
 end
