@@ -61,7 +61,7 @@ Construct turbidity out of low range OBS3 measurements.
 function Turbidity(a::AnalogLow,obs::OBS3)
     aq = quantity(a)
     b = [evalobs(aq[i],obs,true) for i in eachindex(aq)]
-    Turbidity(times(a),b)
+    Turbidity(TidalFluxQuantities.times(a),b)
 end
 
 """
@@ -72,7 +72,16 @@ Construct turbidity out of high range OBS3 measurements
 function Turbidity(a::AnalogHigh,obs::OBS3)
     aq = quantity(a)
     b = [evalobs(aq[i],obs,false) for i in eachindex(aq)]
-    Turbidity(times(a),b)
+    Turbidity(TidalFluxQuantities.times(a),b)
+end
+
+function Turbidity(adcp::ADCPData,islow=true,obs_dict=BU_obs_dict)
+    obs = get(()->error("OBS not found in obs_dict"),obs_dict,adcp.dep.adcp.obsSerialNumber)
+    if islow
+        return Turbidity(AnalogLow(adcp),obs)
+    else
+        return Turbidity(AnalogHigh(adcp),obs)
+    end    
 end
 
 ## These are the Boston University OBS sensors. I am not sure how best to
