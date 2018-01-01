@@ -60,7 +60,7 @@ function load_datatable(cal::CalibrationDeployment,ADCPdatadir=adcp_data_directo
                         string(cal.deployment.location),
                         "calibrations",
                         cal.id)
-    D = readtable(joinpath(data_dir,"discharge_calibrations.csv"))
+    readtable(joinpath(data_dir,"discharge_calibrations.csv"))
 end
 
 function load_data(cal::CalibrationDeployment,ADCPdatadir=adcp_data_directory[:_ADCPDATA_DIR])
@@ -69,7 +69,7 @@ function load_data(cal::CalibrationDeployment,ADCPdatadir=adcp_data_directory[:_
     cs = load_data(cal.cs)
     _,dd = computedischarge(ad,cs)
     
-    load_datatable(cal,ADCPdatadir)
+    D = load_datatable(cal,ADCPdatadir)
     # We need to convert the DataArray to an Array{Float64}
     # But only after the subtyping changes in TidalFluxQuantities
     dc = Discharge(DateTime(D[:DateTime]),float(D[:SP_Q]))
@@ -82,7 +82,7 @@ function load_data(cal::CalibrationDeployment,flag::Bool,ADCPdatadir=adcp_data_d
     cs = load_data(cal.cs)
     hh,dd,AA,vv = computedischarge(ad,cs,flag)
     
-    load_datatable(cal,ADCPdatadir)
+    D = load_datatable(cal,ADCPdatadir)
     dc = Discharge(DateTime(D[:DatennTime]),float(D[:SP_Q]))
     Calibration(dc,dd),hh,AA,vv
 end
