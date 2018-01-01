@@ -55,6 +55,9 @@ detupleize(T) = vcat([[T[i]...]' for i in 1:length(T)]...)
 
 tops(H::Stage,bs,α=cosd(25)) = [findfirst(x->x>quantity(H)[i]*α,bs)-1 for i in eachindex(H)]
 
+mask(H::Stage,bs,α=cosd(25)) = tops(H,bs,α).>0
+mask(adcp::ADCPData,α=cosd(25)) = mask(atmoscorrect(adcp),bins(adcp.dep.adcp),α)
+
 function vavg{T<:AbstractFloat}(pq::Stage,V::Array{T,3},bs::AbstractVector,α=cosd(25))
     t = TidalFluxQuantities.times(pq)
     tt = tops(pq,bs,α)
