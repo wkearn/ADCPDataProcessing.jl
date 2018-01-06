@@ -60,7 +60,7 @@ function load_datatable(cal::CalibrationDeployment,ADCPdatadir=adcp_data_directo
                         string(cal.deployment.location),
                         "calibrations",
                         cal.id)
-    readtable(joinpath(data_dir,"discharge_calibrations.csv"))
+    CSV.read(joinpath(data_dir,"discharge_calibrations.csv"))
 end
 
 function load_data(cal::CalibrationDeployment,ADCPdatadir=adcp_data_directory[:_ADCPDATA_DIR])
@@ -97,7 +97,7 @@ function load_tss_data(cal::CalibrationDeployment,islow=true,ADCPdatadir=adcp_da
                         string(cal.deployment.location),
                         "calibrations",
                         cal.id)
-    D = readtable(joinpath(data_dir,"tss_calibrations.csv"))
+    D = CSV.read(joinpath(data_dir,"tss_calibrations.csv"))
     # We need to convert the DataArray to an Array{Float64}
     # But only after the subtyping changes in TidalFluxQuantities
     dc = TSS(DateTime(D[:DateTime]),float(D[:TSS]))

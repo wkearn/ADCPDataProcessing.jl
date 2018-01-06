@@ -1,6 +1,6 @@
 module ADCPDataProcessing
 
-using TidalFluxQuantities, JSON, DataFrames
+using TidalFluxQuantities, JSON, DataFrames, CSV
 
 include("databases.jl")
 include("types.jl")
