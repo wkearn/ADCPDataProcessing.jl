@@ -89,6 +89,7 @@ function load_data(cs::CrossSection,ADCPdatadir=adcp_data_directory[:_ADCPDATA_D
     data_path = joinpath(ADCPdatadir,
                         string(cs.location),
                         cs.file)
-    D = CSV.read(data_path,footerskip=1)
+    D = CSV.read(data_path,footerskip=1,
+                 weakrefstrings=false)
     CrossSectionData(cs,D[:Distance],D[:Elevation])
 end
