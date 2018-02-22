@@ -20,7 +20,7 @@ analog data
 """
 @quantity AnalogLow Real
 
-AnalogLow(adcp::ADCPData) = AnalogLow(adcp.t,counts2volts.(get(adcp.a1)))
+AnalogLow(adcp::ADCPData) = AnalogLow(adcp.t,counts2volts.(get(adcp.a1))*1000)
 
 """
 An ``R``-valued time series for high-range
@@ -28,7 +28,7 @@ analog data
 """
 @quantity AnalogHigh Real
 
-AnalogHigh(adcp::ADCPData) = AnalogHigh(adcp.t,counts2volts.(get(adcp.a2)))
+AnalogHigh(adcp::ADCPData) = AnalogHigh(adcp.t,counts2volts.(get(adcp.a2))*1000)
 
 """
 An ``R``-valued time series for turbidity
