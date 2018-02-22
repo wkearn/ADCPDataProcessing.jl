@@ -12,13 +12,15 @@ struct OBS3
     highrange
 end
 
+counts2volts(x) = (x/65536)*5
+
 """
 An ``R``-valued time series for low-range 
 analog data
 """
 @quantity AnalogLow Real
 
-AnalogLow(adcp::ADCPData) = AnalogLow(adcp.t,get(adcp.a1))
+AnalogLow(adcp::ADCPData) = AnalogLow(adcp.t,counts2volts.(get(adcp.a1)))
 
 """
 An ``R``-valued time series for high-range
@@ -26,7 +28,7 @@ analog data
 """
 @quantity AnalogHigh Real
 
-AnalogHigh(adcp::ADCPData) = AnalogHigh(adcp.t,get(adcp.a2))
+AnalogHigh(adcp::ADCPData) = AnalogHigh(adcp.t,counts2volts.(get(adcp.a2)))
 
 """
 An ``R``-valued time series for turbidity
