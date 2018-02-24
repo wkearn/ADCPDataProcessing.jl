@@ -15,6 +15,7 @@ p,Q = computedischarge(adata[1],csd)
 
 cals = parse_cals(creek)
 cc = load_data(IndexDischarge,cals[1])
+cv = load_data(IndexVelocity,cals[1])
 
 include("mask.jl")
 include("hdf5.jl")
