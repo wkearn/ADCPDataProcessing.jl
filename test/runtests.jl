@@ -14,7 +14,7 @@ csd = load_data(cs)
 p,Q = computedischarge(adata[1],csd)
 
 cals = parse_cals(creek)
-cc = load_data(cals[1])
+cc = load_data(IndexDischarge,cals[1])
 
 include("mask.jl")
 include("hdf5.jl")
