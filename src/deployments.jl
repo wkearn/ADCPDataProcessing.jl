@@ -52,7 +52,7 @@ function Base.show(io::IO,cs::CrossSection)
     print(io,cs.location)
 end
 
-function parse_deps{C}(creek::Creek{C},ADCPdatadir=adcp_data_directory[:_ADCPDATA_DIR],schema=metadataschema)
+function parse_deps{C}(creek::Creek{C},ADCPdatadir=TidalFluxConfigurations.config[:_ADCPDATA_DIR],schema=metadataschema)
     d = metadataload(creek,ADCPdatadir,schema)
     deps = Deployment[]
     for dep in d["deployments"]
@@ -72,7 +72,7 @@ function parse_deps{C}(creek::Creek{C},ADCPdatadir=adcp_data_directory[:_ADCPDAT
     deps
 end
 
-function parse_cs{C}(creek::Creek{C},ADCPdatadir=adcp_data_directory[:_ADCPDATA_DIR],schema=metadataschema)
+function parse_cs{C}(creek::Creek{C},ADCPdatadir=TidalFluxConfigurations.config[:_ADCPDATA_DIR],schema=metadataschema)
     cs = metadataload(creek,ADCPdatadir,schema)["cross-section"]
     f = cs["file"]
     CrossSection(creek,f)

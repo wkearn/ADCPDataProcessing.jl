@@ -1,8 +1,7 @@
 module ADCPDataProcessing
 
-using TidalFluxQuantities, JSON, DataFrames, CSV
+using TidalFluxQuantities, TidalFluxConfigurations, JSON, DataFrames, CSV
 
-include("databases.jl")
 include("types.jl")
 include("schema.jl")
 include("deployments.jl")

@@ -1,7 +1,7 @@
 using TidalFluxQuantities, TidalFluxConfigurations, PIEMetData, ADCPDataProcessing, TidalFluxExampleData
 using Base.Test
 
-setADCPdatadir!(Pkg.dir("TidalFluxExampleData","data","adcp"))
+TidalFluxConfigurations.config[:_ADCPDATA_DIR] = Pkg.dir("TidalFluxExampleData","data","adcp")
 TidalFluxConfigurations.config[:_METDATA_DIR] = Pkg.dir("TidalFluxExampleData","data","met")
 
 creek = Creek{:sweeney}()
