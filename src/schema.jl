@@ -32,7 +32,7 @@ function validatedload(file::String,schema=metadataschema)
     end
 end
 
-function metadataload(creek::Creek,ADCPdatadir=adcp_data_directory[:_ADCPDATA_DIR],schema=metadataschema)
+function metadataload(creek::Creek,ADCPdatadir=TidalFluxConfigurations.config[:_ADCPDATA_DIR],schema=metadataschema)
     file = joinpath(ADCPdatadir,string(creek),"METADATA.json")
     validatedload(file)
 end

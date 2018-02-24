@@ -26,7 +26,7 @@ end
 quantities_map = Dict{String,UnionAll}("discharge" => Discharge,
                                        "tss" => TSS)
                                       
-function parse_cals{C}(creek::Creek{C},ADCPdatadir=adcp_data_directory[:_ADCPDATA_DIR],schema=metadataschema)
+function parse_cals{C}(creek::Creek{C},ADCPdatadir=TidalFluxConfigurations.config[:_ADCPDATA_DIR],schema=metadataschema)
     cs = parse_cs(creek)
     deps = parse_deps(creek)
     ids = map(x->x.id,deps)
@@ -55,7 +55,7 @@ Base.:(==)(c1::CalibrationDeployment,c2::CalibrationDeployment) = hash(c1)==hash
 #####################################################
 # Loading calibration data
 
-function load_datatable(cal::CalibrationDeployment,ADCPdatadir=adcp_data_directory[:_ADCPDATA_DIR])
+function load_datatable(cal::CalibrationDeployment,ADCPdatadir=TidalFluxConfigurations.config[:_ADCPDATA_DIR])
     data_dir = joinpath(ADCPdatadir,
                         string(cal.deployment.location),
                         "calibrations",
@@ -63,7 +63,7 @@ function load_datatable(cal::CalibrationDeployment,ADCPdatadir=adcp_data_directo
     CSV.read(joinpath(data_dir,"discharge_calibrations.csv"))
 end
 
-function load_data(cal::CalibrationDeployment,ADCPdatadir=adcp_data_directory[:_ADCPDATA_DIR])
+function load_data(cal::CalibrationDeployment,ADCPdatadir=TidalFluxConfigurations.config[:_ADCPDATA_DIR])
     # Load ADCP data and convert to discharges
     ad = load_data(cal.deployment)
     cs = load_data(cal.cs)
@@ -76,7 +76,7 @@ function load_data(cal::CalibrationDeployment,ADCPdatadir=adcp_data_directory[:_
     Calibration(dc,dd)
 end
 
-function load_data(cal::CalibrationDeployment,flag::Bool,ADCPdatadir=adcp_data_directory[:_ADCPDATA_DIR])
+function load_data(cal::CalibrationDeployment,flag::Bool,ADCPdatadir=TidalFluxConfigurations.config[:_ADCPDATA_DIR])
     # Load ADCP data and convert to discharges
     ad = load_data(cal.deployment)
     cs = load_data(cal.cs)
@@ -87,7 +87,7 @@ function load_data(cal::CalibrationDeployment,flag::Bool,ADCPdatadir=adcp_data_d
     Calibration(dc,dd),hh,AA,vv
 end
 
-function load_tss_data(cal::CalibrationDeployment,islow=true,ADCPdatadir=adcp_data_directory[:_ADCPDATA_DIR])
+function load_tss_data(cal::CalibrationDeployment,islow=true,ADCPdatadir=TidalFluxConfigurations.config[:_ADCPDATA_DIR])
     # Load ADCP data and convert to discharges
     ad = load_data(cal.deployment)
     cs = load_data(cal.cs)
