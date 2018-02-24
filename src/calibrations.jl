@@ -27,6 +27,7 @@ function Base.show(io::IO,cal::CalibrationDeployment)
 end
 
 quantities_map = Dict{String,UnionAll}("discharge" => Discharge,
+                                       "velocity" => AlongChannelVelocity,
                                        "tss" => TSS)
                                       
 function parse_cals{C}(creek::Creek{C},ADCPdatadir=TidalFluxConfigurations.config[:_ADCPDATA_DIR],schema=metadataschema)
@@ -72,6 +73,9 @@ function load_datatable(cal::CalibrationDeployment,ADCPdatadir=TidalFluxConfigur
 end
 
 function load_data(::Type{IndexDischarge},cal::CalibrationDeployment,ADCPdatadir=TidalFluxConfigurations.config[:_ADCPDATA_DIR])
+    if "discharge" ∉ cal.quantities
+        error("Index discharge not collected for this calibration")
+    end
     # Load ADCP data and convert to discharges
     ad = load_data(cal.deployment)
     cs = load_data(cal.cs)
@@ -85,6 +89,9 @@ function load_data(::Type{IndexDischarge},cal::CalibrationDeployment,ADCPdatadir
 end
 
 function load_data(::Type{IndexVelocity},cal::CalibrationDeployment,ADCPdatadir=TidalFluxConfigurations.config[:_ADCPDATA_DIR])
+    if "velocity" ∉ cal.quantities
+        error("Index velocity not collected for this calibration")
+    end
     # Load ADCP data and convert to discharges
     ad = load_data(cal.deployment)
     cs = load_data(cal.cs)
