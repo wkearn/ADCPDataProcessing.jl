@@ -1,6 +1,9 @@
 using TidalFluxCalibrations
     
-export CalibrationDeployment, parse_cals
+export CalibrationDeployment,
+    parse_cals,
+    IndexDischarge,
+    IndexVelocity
 
 #####################################################
 # Definition of Calibration type and loading
@@ -24,6 +27,7 @@ function Base.show(io::IO,cal::CalibrationDeployment)
 end
 
 quantities_map = Dict{String,UnionAll}("discharge" => Discharge,
+                                       "velocity" => AlongChannelVelocity,
                                        "tss" => TSS)
                                       
 function parse_cals{C}(creek::Creek{C},ADCPdatadir=TidalFluxConfigurations.config[:_ADCPDATA_DIR],schema=metadataschema)
@@ -55,6 +59,11 @@ Base.:(==)(c1::CalibrationDeployment,c2::CalibrationDeployment) = hash(c1)==hash
 #####################################################
 # Loading calibration data
 
+abstract type DischargeCalibrationMethod end
+
+struct IndexVelocity <: DischargeCalibrationMethod end
+struct IndexDischarge <: DischargeCalibrationMethod end
+
 function load_datatable(cal::CalibrationDeployment,ADCPdatadir=TidalFluxConfigurations.config[:_ADCPDATA_DIR])
     data_dir = joinpath(ADCPdatadir,
                         string(cal.deployment.location),
@@ -63,7 +72,10 @@ function load_datatable(cal::CalibrationDeployment,ADCPdatadir=TidalFluxConfigur
     CSV.read(joinpath(data_dir,"discharge_calibrations.csv"))
 end
 
-function load_data(cal::CalibrationDeployment,ADCPdatadir=TidalFluxConfigurations.config[:_ADCPDATA_DIR])
+function load_data(::Type{IndexDischarge},cal::CalibrationDeployment,ADCPdatadir=TidalFluxConfigurations.config[:_ADCPDATA_DIR])
+    if "discharge" ∉ cal.quantities
+        error("Index discharge not collected for this calibration")
+    end
     # Load ADCP data and convert to discharges
     ad = load_data(cal.deployment)
     cs = load_data(cal.cs)
@@ -73,6 +85,24 @@ function load_data(cal::CalibrationDeployment,ADCPdatadir=TidalFluxConfiguration
     # We need to convert the DataArray to an Array{Float64}
     # But only after the subtyping changes in TidalFluxQuantities
     dc = Discharge(DateTime.(D[:DateTime]),float(D[:SP_Q]))
+    Calibration(dc,dd)
+end
+
+function load_data(::Type{IndexVelocity},cal::CalibrationDeployment,ADCPdatadir=TidalFluxConfigurations.config[:_ADCPDATA_DIR])
+    if "velocity" ∉ cal.quantities
+        error("Index velocity not collected for this calibration")
+    end
+    # Load ADCP data and convert to discharges
+    ad = load_data(cal.deployment)
+    cs = load_data(cal.cs)
+
+    # We need to compute the velocities, not the discharges here
+    dd = computevelocity(ad)
+    
+    D = load_datatable(cal,ADCPdatadir)
+
+    # Here we load the velocities, not the discharges
+    dc = AlongChannelVelocity(DateTime.(D[:DateTime]),float(D[:SP_V]))
     Calibration(dc,dd)
 end
 
