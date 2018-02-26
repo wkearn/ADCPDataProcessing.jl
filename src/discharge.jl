@@ -115,6 +115,12 @@ function computearea(E,h::Stage,cs::CrossSectionData)
     CrossSectionalArea(ts,applyPolyFit(b,hs+E))
 end
 
+function computearea(adcp::ADCPData,cs::CrossSectionData)
+    H = atmoscorrect(adcp)
+    E = adcp.dep.adcp.elevation
+    computearea(E,H,cs)
+end
+
 function computevelocity(adcp::ADCPData,α=cosd(25))
     cd1 = atmoscorrect(adcp)
     ts,cp = unzip(cd1)
@@ -124,15 +130,11 @@ function computevelocity(adcp::ADCPData,α=cosd(25))
 end
 
 function computedischarge(adcp::ADCPData,cs::CrossSectionData,α=cosd(25))
-    E = adcp.dep.adcp.elevation
-    cd1 = atmoscorrect(adcp)
-    ts,cp = unzip(cd1)
-    V = vavg(cd1,adcp.v,bins(adcp.dep.adcp),α) # :: Velocity
-    vs = rotate(V) # :: AlongChannelVelocity
-    A = computearea(E,cd1,cs) # :: CrossSectionalArea
-    Q = A*vs # :: Discharge
-    Qi = fixOrientation(cd1,Q) # :: Discharge
-    cd1, Qi
+    H  = atmoscorrect(adcp)
+    vs = computevelocity(adcp,α)
+    A  = computearea(adcp,cs)
+    Q  = A*vs 
+    H,Q
 end
 
 function computedischarge(adcp::ADCPData,cs::CrossSectionData,flag::Bool,α=cosd(25))
