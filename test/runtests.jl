@@ -1,4 +1,4 @@
-using TidalFluxQuantities, TidalFluxConfigurations, PIEMetData, ADCPDataProcessing, TidalFluxExampleData
+using TidalFluxQuantities, TidalFluxConfigurations, PIEMetData, ADCPDataProcessing, TidalFluxExampleData, TidalFluxCalibrations
 using Base.Test
 
 TidalFluxConfigurations.config[:_ADCPDATA_DIR] = Pkg.dir("TidalFluxExampleData","data","adcp")
@@ -16,6 +16,12 @@ p,Q = computedischarge(adata[1],csd)
 cals = parse_cals(creek)
 cc = load_data(IndexDischarge,cals[1])
 cv = load_data(IndexVelocity,cals[1])
+
+Qm = fit(PolynomialCalibrationModel,cc,1)
+Vm = fit(PolynomialCalibrationModel,cv,1)
+
+Qc = computedischarge(Qm,adata[1],csd)
+Qv = computedischarge(Vm,adata[1],csd)
 
 include("mask.jl")
 include("hdf5.jl")

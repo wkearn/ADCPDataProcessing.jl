@@ -133,3 +133,20 @@ function load_tss_data(cal::CalibrationDeployment,islow=true,ADCPdatadir=TidalFl
     dc = TSS(DateTime.(D[:DateTime]),float(D[:TSS]))
     Calibration(dc,dd)
 end
+
+#####################################################
+# Applying CalibrationModels to compute discharges
+
+# IndexVelocity
+function computedischarge{T<:AlongChannelVelocity}(m::CalibrationModel{T,T},adcp::ADCPData,csd::CrossSectionData,α=cosd(25))
+    Vi = computevelocity(adcp,α)
+    A  = computearea(adcp,csd)
+    Vc = predict(m,Vi)
+    A*Vc
+end
+
+# IndexDischarge
+function computedischarge{T<:Discharge}(m::CalibrationModel{T,T},adcp::ADCPData,csd::CrossSectionData,α=cosd(25))
+    _,Qi = computedischarge(adcp,csd,α)
+    predict(m,Qi)
+end
