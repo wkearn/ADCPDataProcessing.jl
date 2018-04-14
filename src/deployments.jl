@@ -3,6 +3,8 @@ export ADCP, Deployment, CrossSection, bins, parse_deps, parse_cs
 type ADCP
     serialNumber::String
     hasAnalog::Bool
+    validAnalog::Bool
+    analogHigh::Bool
     obsSerialNumber::String
     blankingDistance::Real
     cellSize::Real
@@ -61,13 +63,15 @@ function parse_deps{C}(creek::Creek{C},ADCPdatadir=TidalFluxConfigurations.confi
         ed = DateTime(dep["endDate"])
         sN = dep["serialNumber"]
         hA = dep["hasAnalog"]
+        vA = get(dep,"validAnalog",false)
+        aH = get(dep,"analogHigh",false)
         bD = dep["blankingDistance"]
         cS = dep["cellSize"]
         nC = dep["nCells"]
         dT = dep["deltaT"]
         aZ = dep["elevation"]
         oSN= get(dep,"obsSerialNumber","")
-        push!(deps,Deployment(id,creek,sd,ed,ADCP(sN,hA,oSN,bD,cS,nC,dT,aZ)))
+        push!(deps,Deployment(id,creek,sd,ed,ADCP(sN,hA,vA,aH,oSN,bD,cS,nC,dT,aZ)))
     end
     deps
 end
